@@ -10,9 +10,9 @@ dispenserW :- thing(-1,0,dispenser,_).
 
 //dispensorFound(X,Y) : thing(X,Y, dispensor,_).
 //dispenserfound(X,Y).
-goalfound(X,Y).
-blockattached(X,Y).
-atGoal(0,0).
+//goalfound(X,Y).
+//blockattached(X,Y).
+//atGoal(0,0).
 
 /* Initial goals */
 
@@ -25,6 +25,8 @@ atGoal(0,0).
 
 +!start : true <- 
 	.print("hello massim world.").
+
+//MOVES TOWARDS GOAL
 
 // +step(X) : goal(XG,YG) & not goal(0,0)<-
 //     -goalfound(XG,YG);
@@ -42,26 +44,27 @@ atGoal(0,0).
 //         move(n);
 //     };.
 
+//IF AT GOAL SKIP STEP -- PLACEHOLDER
 // +step(X) : goal(0,0) <-
 //     skip.
 
-+step(X) : blockattached(BX,BY)  & goal(XG,YG) <-
-    if(XG < 0){
-        move(w);
-    };
-    if(XG > 0){
-        move(e);
-    };
-    if(YG > 0){
-        move(n);
-    };
-    if(YG < 0){
-        move(n);
-    };.
-	
-+step(X) : blockattached(BX,BY) <-
-    move(n).
 
+//ATTEMPTING TO  MOVE WHEN BLOCK ATTACHED
+//+step(X) : blockattached(BX,BY)  & goal(XG,YG) <-
+//    if(XG < 0){
+//        move(w);
+//    };
+//    if(XG > 0){
+//        move(e);
+//    };
+//    if(YG > 0){
+//        move(n);
+//    };
+//    if(YG < 0){
+//        move(n);
+//    };.
+
+//REQUEST BLOCK WHEN AGENT IS AT DISPENSER
 +step(X) : thing(0,1,dispenser,_) <-
  request(s).
 +step(X) : thing(0,-1,dispenser,_) <-
@@ -71,19 +74,21 @@ atGoal(0,0).
 +step(X) : thing(-1,0,dispenser,_) <-
  request(w).
 
-+step(X) : thing(0,1,block,_) & not blockattached(0,1) <-
- attach(s);
- +blockattached(0,1).
-+step(X) : thing(0,-1,block,_) & not blockattached(0,-1)<-
- attach(n);
- +blockattached(0,-1).
-+step(X) : thing(1,0,block,_) & not blockattached(1,0)<-
- attach(e);
- +blockattached(1,0).
-+step(X) : thing(-1,0,block,_) & not blockattached(-1,0)<-
- attach(w);
- +blockattached(-1,0).
+//ATTACH TO BLOCK WHEN AT DISPENSER
+//+step(X) : thing(0,1,block,_) & not blockattached(0,1) <-
+// attach(s);
+// +blockattached(0,1).
+//+step(X) : thing(0,-1,block,_) & not blockattached(0,-1)<-
+// attach(n);
+// +blockattached(0,-1).
+//+step(X) : thing(1,0,block,_) & not blockattached(1,0)<-
+// attach(e);
+// +blockattached(1,0).
+//+step(X) : thing(-1,0,block,_) & not blockattached(-1,0)<-
+// attach(w);
+// +blockattached(-1,0).
 
+//MOVE TO DISPENSER
 +step(X) : thing(TX,TY,dispenser,D) & not dispenserE & not dispenserN & not dispenserS & not dispenserW <- 
 	.print("Determining my action");
     -dispenserfound(TX,TY,D);
@@ -102,8 +107,8 @@ atGoal(0,0).
     };.
 	//!move_random.
 
-+step(X) : dispenserE | dispenserN | dispenserS |  dispenserW <-
-    skip.
+//+step(X) : dispenserE | dispenserN | dispenserS |  dispenserW <-
+//   skip.
 
 +step(X) : not thing(TX,TY,dispenser,_) <-
     !move_random.

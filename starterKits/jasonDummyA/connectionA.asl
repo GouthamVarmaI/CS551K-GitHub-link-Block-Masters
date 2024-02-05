@@ -34,35 +34,58 @@ dispenserW :- thing(-1,0,dispenser,_).
 //     if(XG < 0){
 //         move(w);
 //     };
+//     if(YG < 0){
+//         move(n);
+//     };
 //     if(XG > 0){
 //         move(e);
 //     };
 //     if(YG > 0){
 //         move(n);
-//     };
-//     if(YG < 0){
-//         move(n);
 //     };.
 
-//IF AT GOAL SKIP STEP -- PLACEHOLDER
+// // +step(X) : goal(0,0) & goal(0,-1) <-
+// //     move(s).
+// // +step(X) : goal(0,0) & goal(1,0) <-
+// //     move(e).
+// // +step(X) : goal(0,0) & goal(0,-1) <-
+// //     move(w).
+
+// //IF AT GOAL SKIP STEP -- PLACEHOLDER
 // +step(X) : goal(0,0) <-
 //     skip.
 
+//+step(X) : blockattached(BX,BY) <-
+
 
 //ATTEMPTING TO  MOVE WHEN BLOCK ATTACHED
-//+step(X) : blockattached(BX,BY)  & goal(XG,YG) <-
-//    if(XG < 0){
-//        move(w);
-//    };
-//    if(XG > 0){
-//        move(e);
-//    };
-//    if(YG > 0){
-//        move(n);
-//    };
-//    if(YG < 0){
-//        move(n);
-//    };.
++step(X) : blockattached(BX,BY)  & goal(XG,YG) <-
+   if(XG < 0){
+       move(w);
+   };
+   if(XG > 0){
+       move(e);
+   };
+   if(YG > 0){
+       move(n);
+   };
+   if(YG < 0){
+       move(n);
+   };.
+
+//ATTACH TO BLOCK WHEN AT DISPENSER
++step(X) : thing(0,1,block,_) <-
+attach(s);
++blockattached(0,1).
++step(X) : thing(0,-1,block,_)<-
+attach(n);
++blockattached(0,-1).
++step(X) : thing(1,0,block,_)<-
+attach(e);
++blockattached(1,0).
++step(X) : thing(-1,0,block,_)<-
+attach(w);
++blockattached(-1,0).
 
 //REQUEST BLOCK WHEN AGENT IS AT DISPENSER
 +step(X) : thing(0,1,dispenser,_) <-
@@ -74,19 +97,6 @@ dispenserW :- thing(-1,0,dispenser,_).
 +step(X) : thing(-1,0,dispenser,_) <-
  request(w).
 
-//ATTACH TO BLOCK WHEN AT DISPENSER
-//+step(X) : thing(0,1,block,_) & not blockattached(0,1) <-
-// attach(s);
-// +blockattached(0,1).
-//+step(X) : thing(0,-1,block,_) & not blockattached(0,-1)<-
-// attach(n);
-// +blockattached(0,-1).
-//+step(X) : thing(1,0,block,_) & not blockattached(1,0)<-
-// attach(e);
-// +blockattached(1,0).
-//+step(X) : thing(-1,0,block,_) & not blockattached(-1,0)<-
-// attach(w);
-// +blockattached(-1,0).
 
 //MOVE TO DISPENSER
 +step(X) : thing(TX,TY,dispenser,D) & not dispenserE & not dispenserN & not dispenserS & not dispenserW <- 
@@ -105,12 +115,15 @@ dispenserW :- thing(-1,0,dispenser,_).
     if(TY < 0){
         move(n);
     };.
-	//!move_random.
+	!move_random.
 
-//+step(X) : dispenserE | dispenserN | dispenserS |  dispenserW <-
-//   skip.
++step(X) : dispenserE | dispenserN | dispenserS |  dispenserW <-
+  skip.
 
 +step(X) : not thing(TX,TY,dispenser,_) <-
+    !move_random.
+
++step(X) : not goal(GX,GY) <-
     !move_random.
 
 +!move_random : .random(RandomNumber) & random_dir([n,s,e,w],RandomNumber,Dir)

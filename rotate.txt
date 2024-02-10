@@ -1,0 +1,36 @@
++step(X) : lastActionResult(failed_path) & lastActionParams([P]) & lastAction(move) & blockattached(-1,0,B) <-
+    
+    if(P == n){
+       rotate(ccw);
+   };
+    
+    if(P == s){
+       rotate(cw);
+   };.
+
++step(X) : lastActionResult(failed_path) & lastActionParams([P]) & lastAction(move) & blockattached(1,0,B) <-
+    .print("4");
+    if(P == n){
+       rotate(cw);
+   };
+    if(P == s){
+       rotate(ccw);
+   };.
+   
++step(X) : lastActionResult(failed_path) & lastActionParams([P]) & lastAction(move) & blockattached(0,-1,B) <-
+    .print("5");
+    if(P == e){
+       rotate(ccw);
+   };
+    if(P == w){
+       rotate(cw);
+   };.
+
++step(X) : lastActionResult(failed_path) & lastActionParams([P]) & lastAction(move) & blockattached(0,1,B) <-
+    .print("6");
+    if(P == e){
+       rotate(cw);
+   };
+    if(P == w){
+       rotate(ccw);
+   };.

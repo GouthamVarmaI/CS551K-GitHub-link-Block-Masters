@@ -29,14 +29,14 @@ dispenserW :- thing(-1,0,dispenser,_).
     move(e).
 
 
-+step(X) : attached(1,0) & obstacle(1,1) & obstacle(1,-1) <-
++step(X) : blockattached(1,0) & obstacle(1,1) & obstacle(1,-1) <-
     move(e).
-+step(X) : attached(-1,0) & obstacle(-1,1) & obstacle(-1,-1) <-
++step(X) : blockattached(-1,0) & obstacle(-1,1) & obstacle(-1,-1) <-
     move(w).
 
-+step(X) : attached(0,1) & obstacle(-1,1) & obstacle(1,1) <-
++step(X) : blockattached(0,1) & obstacle(-1,1) & obstacle(1,1) <-
     move(n).
-+step(X) : attached(0,-1) & obstacle(-1,-1) & obstacle(1,-1) <-
++step(X) : blockattached(0,-1) & obstacle(-1,-1) & obstacle(1,-1) <-
     move(s).
 
 
@@ -80,30 +80,30 @@ dispenserW :- thing(-1,0,dispenser,_).
        move(s);
    };.
 
-+step(X) : lastActionResult(failed_forbidden) &   // tocheck if the current failure case is due to a forbidden action
-    lastActionParams([P]) &               // Extract the parameters of the current action
-    currloc_agent(X,Y)  &   // heck if the current cell is not occupied
-    distance(Dir, dislength) <-            // get the distance from the agent to a certain direction                          
+// +step(X) : lastActionResult(failed_forbidden) &   // tocheck if the current failure case is due to a forbidden action
+//     lastActionParams([P]) &               // Extract the parameters of the current action
+//     currloc_agent(X,Y)  &   // heck if the current cell is not occupied
+//     distance(Dir, dislength) <-            // get the distance from the agent to a certain direction                          
    
-    .print("Failed Forbiddne");                  
+//     .print("Failed Forbiddne");                  
    
-    .member(F, P);                              // to check if the parameter F is a member of the action parameters
-    if(F==n){                                   // if the parameter indicates a move to the north direction
-        -+currloc_agent(X, Y+1);               // update the current location of the agent accordingly (move north)
-        -+distance(s, Path);                    
-    }
-    elif(F==w){                                
-        -+currloc_agent(X+1, Y);              
-        -+distance(e, Path);                  
-    }
-    elif(F==s){                                
-        -+currloc_agent(X, Y-1);              
-        -+distance(n, Path);                  
-    }
-    elif(F==e){                                
-        -+currloc_agent(X-1, Y);              
-        -+distance(w, Path);                  
-    }.
+//     .member(F, P);                              // to check if the parameter F is a member of the action parameters
+//     if(F==n){                                   // if the parameter indicates a move to the north direction
+//         -+currloc_agent(X, Y+1);               // update the current location of the agent accordingly (move north)
+//         -+distance(s, Path);                    
+//     }
+//     elif(F==w){                                
+//         -+currloc_agent(X+1, Y);              
+//         -+distance(e, Path);                  
+//     }
+//     elif(F==s){                                
+//         -+currloc_agent(X, Y-1);              
+//         -+distance(n, Path);                  
+//     }
+//     elif(F==e){                                
+//         -+currloc_agent(X-1, Y);              
+//         -+distance(w, Path);                  
+//     }.
 
 // +step(X) : lastActionResult(failed_path) &   // tocheck if the current failure case is due to a forbidden action
 //     lastActionParams([P]) &               // Extract the parameters of the current action
@@ -173,33 +173,33 @@ dispenserW :- thing(-1,0,dispenser,_).
        move(s);
    };.
 
-+step(X) : attached(BX,BY) & not goal(XG,YG) <-
++step(X) : blockattached(BX,BY,_)  & not goal(XG,YG) <-
     // !agent_movment;
     // !position_update(Dir).
     !move_random.
 
 //ATTACH TO BLOCK WHEN AT DISPENSER
-+step(X) : thing(0,1,block,B) & thing(0,1,dispenser,_) & not attached(BX,BY)<-
++step(X) : thing(0,1,block,B) & thing(0,1,dispenser,_) & not blockattached(BX,BY,_) & lastAction(request)<-
 +blockattached(0,1,B);
 attach(s).
-+step(X) : thing(0,-1,block,B) & thing(0,-1,dispenser,_) & not attached(BX,BY)<-
++step(X) : thing(0,-1,block,B) & thing(0,-1,dispenser,_) & not blockattached(BX,BY,_) & lastAction(request) <-
 +blockattached(0,-1,B);
 attach(n).
-+step(X) : thing(1,0,block,B) & thing(1,0,dispenser,_) & not attached(BX,BY)<-
++step(X) : thing(1,0,block,B) & thing(1,0,dispenser,_) & not blockattached(BX,BY,_) & lastAction(request)<-
 +blockattached(1,0,B);
 attach(e).
-+step(X) : thing(-1,0,block,B) & thing(-1,0,dispenser,_) & not attached(BX,BY)<-
++step(X) : thing(-1,0,block,B) & thing(-1,0,dispenser,_) & not blockattached(BX,BY,_) & lastAction(request)<-
 +blockattached(-1,0,B);
 attach(w).
 
 // REQUEST BLOACKS FROM DISPENSERS
-+step(X) : thing(0,1,dispenser,_) & not attached(BX,BY)<-
++step(X) : thing(0,1,dispenser,_) & not blockattached(BX,BY,_) <-
  request(s).
-+step(X) : thing(0,-1,dispenser,_) & not attached(BX,BY)<-
++step(X) : thing(0,-1,dispenser,_) & not blockattached(BX,BY,_) <-
  request(n).
-+step(X) : thing(1,0,dispenser,_) & not attached(BX,BY)<-
++step(X) : thing(1,0,dispenser,_) & not blockattached(BX,BY,_) <-
  request(e).
-+step(X) : thing(-1,0,dispenser,_) & not attached(BX,BY)<-
++step(X) : thing(-1,0,dispenser,_) & not blockattached(BX,BY,_) <-
  request(w).
 
 +step(X) : not thing(DX,DY,dispenser,_)<-
@@ -255,7 +255,7 @@ attach(w).
     };.
 
 //ATTEMPTING TO  MOVE WHEN BLOCK ATTACHED
-+step(X) : attached(BX,BY)  & goal(XG,YG) & not goal(0,0)<-
++step(X) : blockattached(BX,BY,_)   & goal(XG,YG) & not goal(0,0)<-
    if(XG < 0){
        move(w);
    };
@@ -268,6 +268,9 @@ attach(w).
    if(YG > 0){
        move(s);
    };.
+
++step(X) : true <-
+    !move_random.
 
 +!move_random : .random(RandomNumber) & random_dir([n,s,e,w],RandomNumber,Dir)
 <-	move(Dir).

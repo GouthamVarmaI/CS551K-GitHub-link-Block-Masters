@@ -63,22 +63,58 @@ dispenserW :- thing(-1,0,dispenser,_).
        move(s);
    };.
 
++step(X) : lastActionResult(failed_path) & lastActionParams([P]) & lastAction(move) & blockattached(-1,0,B) <-
+    
+    if(P == n){
+       rotate(ccw);
+   };
+    
+    if(P == s){
+       rotate(cw);
+   };.
 
-+step(X) : attached(DX,DY) & not blockattached(BX,BY,_) <-
-    -attached(DX,DY);
-    skip.
-    // if(DX==0 & DY==-1){
-    //     detach(n);
-    // }
-    // if(DX==0 & DY==1){
-    //     detach(s);
-    // }
-    // if(DX==-1 & DY==0){
-    //     detach(w);
-    // }
-    // if(DX==1 & DY==0){
-    //     detach(e);
-    // };.
++step(X) : lastActionResult(failed_path) & lastActionParams([P]) & lastAction(move) & blockattached(1,0,B) <-
+    .print("4");
+    if(P == n){
+       rotate(cw);
+   };
+    if(P == s){
+       rotate(ccw);
+   };.
+   
++step(X) : lastActionResult(failed_path) & lastActionParams([P]) & lastAction(move) & blockattached(0,-1,B) <-
+    .print("5");
+    if(P == e){
+       rotate(ccw);
+   };
+    if(P == w){
+       rotate(cw);
+   };.
+
++step(X) : lastActionResult(failed_path) & lastActionParams([P]) & lastAction(move) & blockattached(0,1,B) <-
+    .print("6");
+    if(P == e){
+       rotate(cw);
+   };
+    if(P == w){
+       rotate(ccw);
+   };.
+
+// +step(X) : attached(DX,DY) & not blockattached(BX,BY,_) <-
+//     -attached(DX,DY);
+//     skip.
+//     // if(DX==0 & DY==-1){
+//     //     detach(n);
+//     // }
+//     // if(DX==0 & DY==1){
+//     //     detach(s);
+//     // }
+//     // if(DX==-1 & DY==0){
+//     //     detach(w);
+//     // }
+//     // if(DX==1 & DY==0){
+//     //     detach(e);
+//     // };.
 
 
 +step(X) : blockattached(BX,BY,_) & obstacle(DX,DY,_) & lastAction(move) & lastActionParams(PX) <-
@@ -91,12 +127,13 @@ dispenserW :- thing(-1,0,dispenser,_).
         move(n);
     };.
 
-+step(X) : blockattached(0,1,B) & goal(0,0) & not task(TASK,_,_,[req(0,1,B)]) <-  
-    skip.
-
 +step(X) : blockattached(0,1,B) & goal(0,0) & task(TASK,_,_,[req(0,1,B)]) <-  
     submit(TASK);
     -blockattached(0,1,_).
+
++step(X) : blockattached(0,1,B) & goal(0,0) & not task(TASK,_,_,[req(0,1,B)]) <-  
+    skip.
+
 
 
 +step(X) : blockattached(BX,BY,_) & goal(0,0) <-

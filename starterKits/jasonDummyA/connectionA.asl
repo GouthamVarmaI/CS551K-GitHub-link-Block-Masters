@@ -22,22 +22,37 @@ dispenserW :- thing(-1,0,dispenser,_).
 +!start : true <- 
 	.print("hello massim world.").
 
-+step(X) : obstacle(1,0) & obstacle(-1,0) <-
-    move(n).
+// +step(X) : obstacle(1,0) & obstacle(-1,0) <-
+//     move(n).
 
-+step(X) : obstacle(0,1) & obstacle(0,-1) <-
-    move(e).
+// +step(X) : obstacle(0,1) & obstacle(0,-1) <-
+//     move(e).
+
++step(X) : blockattached(0,1) & obstacle(1,1) & obstacle(1,-1) <-
+    rotate(cw).
++step(X) : blockattached(0,-1) & obstacle(1,1) & obstacle(1,-1) <-
+    rotate(ccw).
+
++step(X) : blockattached(0,1) & obstacle(-1,-1) & obstacle(-1,1) <-
+    rotate(ccw).
++step(X) : blockattached(0,-1) & obstacle(-1,-1) & obstacle(-1,1) <-
+    rotate(cw).
 
 
-+step(X) : blockattached(1,0) & obstacle(1,1) & obstacle(1,-1) <-
-    move(e).
-+step(X) : blockattached(-1,0) & obstacle(-1,1) & obstacle(-1,-1) <-
-    move(w).
+// +step(X) : blockattached(0,1) & obstacle(-1,1) & obstacle(1,1) <-
+//     move(n).
+// +step(X) : blockattached(0,-1) & obstacle(-1,-1) & obstacle(1,-1) <-
+//     move(s).
 
-+step(X) : blockattached(0,1) & obstacle(-1,1) & obstacle(1,1) <-
-    move(n).
-+step(X) : blockattached(0,-1) & obstacle(-1,-1) & obstacle(1,-1) <-
-    move(s).
+// +step(X) : blockattached(1,0) & obstacle(1,1) & obstacle(1,-1) <-
+//     move(e).
+// +step(X) : blockattached(-1,0) & obstacle(-1,1) & obstacle(-1,-1) <-
+//     move(w).
+
+// +step(X) : blockattached(0,1) & obstacle(-1,1) & obstacle(1,1) <-
+//     move(n).
+// +step(X) : blockattached(0,-1) & obstacle(-1,-1) & obstacle(1,-1) <-
+//     move(s).
 
 
 +step(X) : lastActionResult(failed) & lastActionParams([P]) & lastAction(rotate) <-
@@ -330,30 +345,30 @@ failed_forbidden    New agent position would be out of map/grid bounds. */
  
  
 //  a rule for handling the case when the previous move of the agentt failed
-+prev_move(move):
-    current_failed_case(failed_forbidden) &   // tocheck if the current failure case is due to a forbidden action
-    current_parameter_case(P) &               // Extract the parameters of the current action
-    currloc_agent(X,Y)  &                    
-    current_cell_occupied(false, ObjX, ObjY, ELE) &  // heck if the current cell is not occupied
-    distance(Dir, dislength) &                 // get the distance from the agent to a certain direction
-    stepsnum(Path) <-                          
+// +prev_move(move):
+//     current_failed_case(failed_forbidden) &   // tocheck if the current failure case is due to a forbidden action
+//     current_parameter_case(P) &               // Extract the parameters of the current action
+//     currloc_agent(X,Y)  &                    
+//     current_cell_occupied(false, ObjX, ObjY, ELE) &  // heck if the current cell is not occupied
+//     distance(Dir, dislength) &                 // get the distance from the agent to a certain direction
+//     stepsnum(Path) <-                          
    
-    .print("ahnzfdnviuzf");                  
+//     .print("ahnzfdnviuzf");                  
    
-    .member(F, P);                              // to check if the parameter F is a member of the action parameters
-    if(F==n){                                   // if the parameter indicates a move to the north direction
-        -+currloc_agent(X, Y+1);               // update the current location of the agent accordingly (move north)
-        -+distance(e, Path);                    
-    }
-    elif(F==w){                                
-        -+currloc_agent(X+1, Y);              
-        -+distance(n, Path);                  
-    }
-    elif(F==s){                                
-        -+currloc_agent(X, Y-1);              
-        -+distance(w, Path);                  
-    }
-    elif(F==e){                                
-        -+currloc_agent(X-1, Y);              
-        -+distance(s, Path);                  
-    } .
+//     .member(F, P);                              // to check if the parameter F is a member of the action parameters
+//     if(F==n){                                   // if the parameter indicates a move to the north direction
+//         -+currloc_agent(X, Y+1);               // update the current location of the agent accordingly (move north)
+//         -+distance(e, Path);                    
+//     }
+//     elif(F==w){                                
+//         -+currloc_agent(X+1, Y);              
+//         -+distance(n, Path);                  
+//     }
+//     elif(F==s){                                
+//         -+currloc_agent(X, Y-1);              
+//         -+distance(w, Path);                  
+//     }
+//     elif(F==e){                                
+//         -+currloc_agent(X-1, Y);              
+//         -+distance(s, Path);                  
+//     } .

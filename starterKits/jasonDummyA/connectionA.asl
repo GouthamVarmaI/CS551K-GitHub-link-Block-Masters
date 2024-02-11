@@ -266,9 +266,3 @@ dispenserW :- thing(-1,0,dispenser,_).
         -+currloc_agent(X-1,Y);
     }.
 
-
-
-// Moving north (P == "n") would decrement the Y coordinate, which is equivalent to moving up.
-// Moving south (P == "s") would increment the Y coordinate, which is equivalent to moving down.
-// Moving east (P == "e") would increment the X coordinate, which is equivalent to moving right.
-// Moving west (P == "w") would decrement the X coordinate, which is equivalent to moving left.

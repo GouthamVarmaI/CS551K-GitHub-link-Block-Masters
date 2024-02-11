@@ -1,4 +1,5 @@
-/* Initial beliefs and rules */
+
+ /* Initial beliefs and rules */
 random_dir(DirList,RandomNumber,Dir) :- (RandomNumber <= 0.25 & .nth(0,DirList,Dir)) | (RandomNumber <= 0.5 & .nth(1,DirList,Dir)) | (RandomNumber <= 0.75 & .nth(2,DirList,Dir)) | (.nth(3,DirList,Dir)).
 
 current_cell_occupied(false, 0, 0, ELEMENT).
@@ -102,6 +103,8 @@ dispenserW :- thing(-1,0,dispenser,_).
     if(P == w){
        rotate(ccw);
    };.
+
+//------------------------------------------------------------------
 // +step(X) : attached(DX,DY) & not blockattached(BX,BY,_) <-
 //     -attached(DX,DY);
 //     skip.
@@ -117,7 +120,7 @@ dispenserW :- thing(-1,0,dispenser,_).
 //     // if(DX==1 & DY==0){
 //     //     detach(e);
 //     // };.
-
+//--------------------------------------------------------------------
 
 +step(X) : blockattached(BX,BY,_) & obstacle(DX,DY,_) & lastAction(move) & lastActionParams(PX) <-
     if(BX == -1 & BY == 0 & DX == -1 & DY == -1 & PX == n){
@@ -256,6 +259,8 @@ dispenserW :- thing(-1,0,dispenser,_).
     // !position_update(Dir).
     !move_random.
 
+//------------------------------------------------------------
+
 // +step(X) : obstacle(0,-1) & lastActionParams([n])  <-
 //     move(e).
 // +step(X) : obstacle(0,1) & lastActionParams([s])<-
@@ -264,6 +269,7 @@ dispenserW :- thing(-1,0,dispenser,_).
 //     move(n).
 // +step(X) : obstacle(-1,0) & lastActionParams([w])<-
 //     move(n).
+//--------------------------------------------------------------
 
 // MOVING TOWARDS DISPENSER
 +step(X) : thing(DX,DY,dispenser,_) & not dispenserE & not dispenserN & not dispenserS & not dispenserW<-
@@ -346,31 +352,33 @@ dispenserW :- thing(-1,0,dispenser,_).
 
     /*
  
- Functionality: The "move" action is responsible for relocating an agent in a particular direction within a given environment or grid.
+
+
+//---------------------------------------------------------------------------------------------
+
+//  Functionality: The "move" action is responsible for relocating an agent in a particular direction within a given environment or grid.
  
-Parameter: The action expects one parameter, which is the direction the agent intends to move. This direction can be one of four options: north (n), south (s), east (e), or west (w).
+// Parameter: The action expects one parameter, which is the direction the agent intends to move. This direction can be one of four options: north (n), south (s), east (e), or west (w).
  
-Failure Codes:
+// Failure Codes:
  
-failed_parameter: This failure code indicates that the provided parameter for the "move" action is not a valid direction. In other words, if the direction specified is not one of {n, s, e, w}, the action cannot be performed.
-failed_path: This failure code signifies that the agent cannot move to the target location because either the destination or the path to it is blocked by obstacles or other objects.
-failed_forbidden: This failure code indicates that the agent cannot move to the specified direction because the new position would be outside the boundaries of the map or grid. It implies that the move would take the agent beyond the permissible area.
- 
- 
+// failed_parameter: This failure code indicates that the provided parameter for the "move" action is not a valid direction. In other words, if the direction specified is not one of {n, s, e, w}, the action cannot be performed.
+// failed_path: This failure code signifies that the agent cannot move to the target location because either the destination or the path to it is blocked by obstacles or other objects.
+// failed_forbidden: This failure code indicates that the agent cannot move to the specified direction because the new position would be outside the boundaries of the map or grid. It implies that the move would take the agent beyond the permissible area.
  
  
+//  move
+// Moves the agent in the specified direction.
  
+// No  Parameter   Meaning
+// 0   direction   One of {n,s,e,w}, representing the direction the agent wants to move in.
+// Failure Code    Reason
+// failed_parameter    Parameter is not a direction.
+// failed_path Cannot move to the target location because the agent or one of its attached things are blocked.
+// failed_forbidden    New agent position would be out of map/grid bounds. */
  
- move
-Moves the agent in the specified direction.
- 
-No  Parameter   Meaning
-0   direction   One of {n,s,e,w}, representing the direction the agent wants to move in.
-Failure Code    Reason
-failed_parameter    Parameter is not a direction.
-failed_path Cannot move to the target location because the agent or one of its attached things are blocked.
-failed_forbidden    New agent position would be out of map/grid bounds. */
- 
+ //-------------------------------------------------------------------------------------------
+
  
  
 //  a rule for handling the case when the previous move of the agentt failed

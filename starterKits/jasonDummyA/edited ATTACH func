@@ -1,0 +1,16 @@
+//ATTACH TO BLOCK WHEN AT DISPENSER
++step(X) : thing(0,1,block,B) & thing(0,1,dispenser,_) & not blockattached(BX,BY,_) & lastAction(request) & not blockattached (Self, B)<-
+attach(s);
++blockattached(0,1,B).
+
++step(X) : thing(0,-1,block,B) & thing(0,-1,dispenser,_) & not blockattached(BX,BY,_) & lastAction(request) & not blockattached (Self, B)  <-
+attach(n);
++blockattached(0,-1,B).
+
++step(X) : thing(1,0,block,B) & thing(1,0,dispenser,_) & not blockattached(BX,BY,_) & lastAction(request) & not blockattached (Self, B)<-
+attach(e);
++blockattached(1,0,B).
+
++step(X) : thing(-1,0,block,B) & thing(-1,0,dispenser,_) & not blockattached(BX,BY,_) & lastAction(request)& not blockattached (Self, B)<-
+attach(w);
++blockattached(-1,0,B).
